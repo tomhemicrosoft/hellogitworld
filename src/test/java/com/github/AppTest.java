@@ -1,8 +1,12 @@
 package com.github;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Test;
+import org.junit.Before;
+import org.junit.After;
+import static org.junit.Assert.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 //Pending comments
 
@@ -13,31 +17,36 @@ import junit.framework.TestSuite;
  * Unit test for simple App.
  */
 public class AppTest 
-    extends TestCase
 {
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
+
+    @Before
+    public void setUpStreams() {
+        System.setOut(new PrintStream(outContent));
+    }
+
+    @After
+    public void restoreStreams() {
+        System.setOut(originalOut);
     }
 
     /**
-     * @return the suite of tests being tested
+     * Test that App prints "Hello World!" to stdout
      */
-    public static Test suite()
+    @Test
+    public void testAppPrintsHelloWorld()
     {
-        return new TestSuite( AppTest.class );
+        App.main(new String[]{});
+        assertEquals("Hello World!" + System.lineSeparator(), outContent.toString());
     }
-
+    
     /**
-     * Rigourous Test :-)
+     * Basic sanity test
      */
-    public void testApp()
+    @Test
+    public void testBasicAssertion()
     {
-        assertTrue( true );
+        assertTrue(true);
     }
 }
